@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>Peereflits.Shared.Databases</AssemblyName>
+    <RootNamespace>Peereflits.Shared.Databases</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ApplicationIcon>..\Solution Items\favicon.ico</ApplicationIcon>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Peereflits</Authors>
+    <Copyright>No Copyright ©, The Netherlands</Copyright>
+    <Description>Peereflits.Shared.Databases is a library for managing database interaction.</Description>
+    <Product>Peereflits.Shared.Databases</Product>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package">
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageIcon>PackageIcon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/peereflits/Shared.Databases.git?path=%2FREADME.md&amp;_a=preview</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/peereflits/Shared.Databases.git</RepositoryUrl>
+    <Title>Peereflits.Shared.Databases package</Title>
+    <PackageDescription>
+Peereflits.Shared.Databases is a library for managing database interaction.
+This component is a shared infrastructure library of Peereflits.
+    </PackageDescription>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+    <Content Include="..\Solution Items\PackageIcon.png" Link="Properties\PackageIcon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.143" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Databases.Interfaces\Databases.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

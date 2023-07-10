@@ -1,0 +1,6 @@
+﻿{
+  "TestSettings": {
+    "DbServerName": "localhost",
+    "IsTrusted":  true
+  }
+}
