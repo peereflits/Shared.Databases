@@ -27,9 +27,9 @@ internal class DatabaseQuery : Database, IDatabaseQuery
     public async Task<IEnumerable<TResult>> Execute<TResult>(string statement, int? commandTimeout = null) 
         => await Execute<TResult>(statement, null, commandTimeout);
 
-    public async Task<IEnumerable<T>> Execute<T>(string statement, object arguments, int? commandTimeout = null)
+    public async Task<IEnumerable<T>> Execute<T>(string statement, object? arguments, int? commandTimeout = null)
     {
-        logger.LogDebug("Executing statement:\r\n{SqlStatement}\r\non {SqlServer}\\{SqlDatabase}", statement, info?.Server, info?.Database);
+        logger.LogDebug("Executing statement:\r\n{SqlStatement}\r\non {SqlServer}\\{SqlDatabase}", statement, info.Server, info.Database);
 
         if(string.IsNullOrWhiteSpace(statement))
         {

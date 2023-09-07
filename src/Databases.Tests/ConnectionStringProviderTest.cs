@@ -9,16 +9,14 @@ public class ConnectionStringProviderTest
     private readonly IProvideConnectionString subject = new ConnectionStringProvider();
 
     [Fact]
-    public void WhenThereIsNoConnectionInfo_ItShouldThrow()
+    public void WhenThereIsInvalidConnectionInfo_ItShouldThrow()
     {
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => subject.Execute(default));
+        Assert.Throws<ArgumentException>(() => subject.Execute(new ConnectionInfo(string.Empty, string.Empty)));
     }
 
     [Fact]
     public void WhenExecute_WithValidConnectionInfo_ItShouldReturnAConnectionString()
     {
-        // Arrange
         var server = Guid.NewGuid().ToString();
         var database = Guid.NewGuid().ToString();
         var user = Guid.NewGuid().ToString();
@@ -26,14 +24,12 @@ public class ConnectionStringProviderTest
 
         var info = new ConnectionInfo(server, database, user, password);
 
-        // Act
         string result = subject.Execute(info);
 
-        // Assert
-        Assert.True(result.Contains(info.Server, StringComparison.OrdinalIgnoreCase));
-        Assert.True(result.Contains(info.Database, StringComparison.OrdinalIgnoreCase));
-        Assert.True(result.Contains(info.User, StringComparison.OrdinalIgnoreCase));
-        Assert.True(result.Contains(info.Password, StringComparison.OrdinalIgnoreCase));
+        Assert.True(result.Contains(server, StringComparison.OrdinalIgnoreCase));
+        Assert.True(result.Contains(database, StringComparison.OrdinalIgnoreCase));
+        Assert.True(result.Contains(user, StringComparison.OrdinalIgnoreCase));
+        Assert.True(result.Contains(password, StringComparison.OrdinalIgnoreCase));
     }
 
     [Theory]
@@ -43,15 +39,11 @@ public class ConnectionStringProviderTest
     [InlineData("tcp:myserver.database.windows.net,1433", null, null, SqlAuthenticationMethod.ActiveDirectoryManagedIdentity)]
     public void WhenExecute_ItShouldHaveProperAuthenticationMethod(string server, string user, string pass, SqlAuthenticationMethod method)
     {
-        // Arrange
         var database = Guid.NewGuid().ToString();
-
         var info = new ConnectionInfo(server, database, user, pass);
 
-        // Act
         string result = subject.Execute(info);
 
-        // Assert
         var sb = new SqlConnectionStringBuilder(result);
         Assert.Equal(method, sb.Authentication);
     }

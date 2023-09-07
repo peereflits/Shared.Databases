@@ -30,8 +30,8 @@ public class ConnectionInfo
 
     public string Server { get; }
     public string Database { get; }
-    public string User { get; }
-    public string Password { get; }
+    public string? User { get; }
+    public string? Password { get; }
 
     public void AssertIsValid()
     {

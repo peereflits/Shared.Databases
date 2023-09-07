@@ -14,8 +14,8 @@ public class ConnectionInfoTest
 
     public static IEnumerable<object[]> InvalidInfos = new List<object[]>
                                                        {
-                                                           new object[] { new ConnectionInfo(null, Database, UserName, Password) },
-                                                           new object[] { new ConnectionInfo(Server, "", UserName, Password) },
+                                                           new object[] { new ConnectionInfo(string.Empty, Database, UserName, Password) },
+                                                           new object[] { new ConnectionInfo(Server, string.Empty, UserName, Password) },
                                                            new object[] { new ConnectionInfo(Server, Database, " ", Password) },
                                                            new object[] { new ConnectionInfo(Server, Database, UserName, "\r\n") }
                                                        };

@@ -12,7 +12,7 @@ internal abstract class Database
 
     protected ICreateDbConnection Connection { get; }
 
-    protected void EnrichException(DbException ex, ConnectionInfo info, string statement, object arguments = null)
+    protected void EnrichException(DbException ex, ConnectionInfo info, string statement, object? arguments = null)
     {
         ex.Data["Server"] = info.Server;
         ex.Data["Database"] = info.Database;
