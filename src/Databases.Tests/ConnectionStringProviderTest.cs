@@ -37,10 +37,12 @@ public class ConnectionStringProviderTest
     [InlineData("localhost", "sa", "password", SqlAuthenticationMethod.SqlPassword)]
     [InlineData("tcp:myserver.database.windows.net,1433", "sa", "password", SqlAuthenticationMethod.SqlPassword)]
     [InlineData("tcp:myserver.database.windows.net,1433", null, null, SqlAuthenticationMethod.ActiveDirectoryManagedIdentity)]
-    public void WhenExecute_ItShouldHaveProperAuthenticationMethod(string server, string user, string pass, SqlAuthenticationMethod method)
+    public void WhenExecute_ItShouldHaveProperAuthenticationMethod(string server, string? user, string? pass, SqlAuthenticationMethod method)
     {
         var database = Guid.NewGuid().ToString();
-        var info = new ConnectionInfo(server, database, user, pass);
+        var info = user == null && pass == null
+                           ? new ConnectionInfo(server, database) 
+                           : new ConnectionInfo(server, database, user ?? string.Empty, pass ?? string.Empty);
 
         string result = subject.Execute(info);
 
