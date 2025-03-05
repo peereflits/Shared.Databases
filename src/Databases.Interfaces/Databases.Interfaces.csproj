@@ -3,7 +3,6 @@
   <PropertyGroup>
     <AssemblyName>Peereflits.Shared.Databases.Interfaces</AssemblyName>
     <RootNamespace>Peereflits.Shared.Databases</RootNamespace>
-    <TargetFrameworks>net6.0;net8.0;net9.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>

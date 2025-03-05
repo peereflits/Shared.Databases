@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Peereflits.Shared.Databases.Tests.Helpers;
 using Xunit;
+using static NSubstitute.Arg;
 
 namespace Peereflits.Shared.Databases.Tests;
 
@@ -12,13 +13,13 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
     private const string Sql = "PRINT 'Hello World'";
 
     private readonly DatabaseFixture fixture;
-    private readonly MockedLogger<DatabaseCommand> logger;
+    private readonly ILogger<DatabaseCommand> logger;
     private readonly DatabaseCommand subject;
 
     public DatabaseCommandTest(DatabaseFixture fixture)
     {
         this.fixture = fixture;
-        logger = Substitute.For<MockedLogger<DatabaseCommand>>();
+        logger = Substitute.For<ILogger<DatabaseCommand>>();
         subject = new DatabaseCommand(fixture.ConnectionCreator, fixture.ConnectionInfo, logger);
     }
 
@@ -78,6 +79,13 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
 
         await Assert.ThrowsAsync<NoRetryDbException>(() => subject.Execute(Sql));
 
-        logger.Received().Log(LogLevel.Error, Arg.Is<string>(x => x.Contains(Sql)));
+        logger
+               .Received()
+               .Log(LogLevel.Error,
+                    Arg.Any<EventId>(),
+                    Arg.Any<AnyType>(),
+                    Arg.Any<NoRetryDbException>(),
+                    Arg.Any<Func<AnyType, Exception?, string>>()
+                   );
     }
 }

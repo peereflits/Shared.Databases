@@ -29,7 +29,10 @@ internal class DatabaseQuery : Database, IDatabaseQuery
 
     public async Task<IEnumerable<T>> Execute<T>(string statement, object? arguments, int? commandTimeout = null)
     {
-        logger.LogDebug("Executing statement:\r\n{SqlStatement}\r\non {SqlServer}\\{SqlDatabase}", statement, info.Server, info.Database);
+        if(logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.LogDebug("Executing statement:\r\n{SqlStatement}\r\non {SqlServer}\\{SqlDatabase}", statement, info.Server, info.Database);
+        }
 
         if(string.IsNullOrWhiteSpace(statement))
         {
@@ -54,7 +57,10 @@ internal class DatabaseQuery : Database, IDatabaseQuery
                                    );
                 }
 
-                logger.LogDebug("Executed statement:\r\n{SqlStatement}\r\non {SqlServer}\\{SqlDatabase}", statement, info?.Server, info?.Database);
+                if(logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("Executed statement:\r\n{SqlStatement}\r\non {SqlServer}\\{SqlDatabase}", statement, info?.Server, info?.Database);
+                }
                 return result;
             }
             catch(DbException ex)

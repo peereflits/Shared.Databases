@@ -1,10 +1,10 @@
 <Project>
 
   <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0;net9.0</TargetFrameworks>
     <ApplicationIcon>..\Solution Items\favicon.ico</ApplicationIcon>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
