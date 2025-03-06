@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Peereflits.Shared.Databases.Tests.Helpers;
 using Xunit;
-using static NSubstitute.Arg;
 
 namespace Peereflits.Shared.Databases.Tests;
 
@@ -15,13 +14,13 @@ public class DatabaseQueryTest : IClassFixture<DatabaseFixture>
     private const string Sql = "SELECT 1";
 
     private readonly DatabaseFixture fixture;
-    private readonly ILogger<DatabaseQuery> logger;
+    private readonly MockedLogger<DatabaseQuery> logger;
     private readonly DatabaseQuery subject;
 
     public DatabaseQueryTest(DatabaseFixture fixture)
     {
         this.fixture = fixture;
-        logger = Substitute.For<ILogger<DatabaseQuery>>();
+        logger = Substitute.For<MockedLogger<DatabaseQuery>>();
         subject = new DatabaseQuery(fixture.ConnectionCreator, fixture.ConnectionInfo, logger);
     }
 
@@ -72,14 +71,36 @@ public class DatabaseQueryTest : IClassFixture<DatabaseFixture>
                          x => throw new RetriedDbException(),
                          x => throw new RetriedDbException(),
                          x => throw new RetriedDbException(),
-                         x => fixture.CreateConnection()
+                         x => fixture.CreateConnection() // This one should not be called!
                         );
 
         await Assert.ThrowsAsync<RetriedDbException>(() => subject.Execute<int>(Sql));
     }
 
     [Fact]
-    public async Task WhenExecuteFails_ItShouldLog()
+    public async Task WhenExecute_IsRetried_ItShouldLogWarning()
+    {
+        fixture
+               .ConnectionCreator
+               .Execute(fixture.ConnectionInfo)
+               .Returns
+                        (
+                         x => throw new RetriedDbException(),
+                         x => fixture.CreateConnection()
+                        );
+
+       _ = await subject.Execute<int>(Sql);
+
+        logger
+               .Received(1)
+               .Log(LogLevel.Warning,
+                    Arg.Is<string>(x=> x.Contains("Retry 1 of executing statement", StringComparison.CurrentCulture)
+                                    && x.Contains(Sql, StringComparison.CurrentCulture)
+                                  ));
+    }
+
+    [Fact]
+    public async Task WhenExecuteFails_ItShouldLogError()
     {
         fixture
                .ConnectionCreator
@@ -95,10 +116,10 @@ public class DatabaseQueryTest : IClassFixture<DatabaseFixture>
         logger
                .Received()
                .Log(LogLevel.Error,
-                    Arg.Any<EventId>(),
-                    Arg.Any<AnyType>(),
-                    Arg.Any<NoRetryDbException>(),
-                    Arg.Any<Func<AnyType, Exception?, string>>()
-                   );
+                    Arg.Is<string>(x=> x.Contains("Failed to execute statement", StringComparison.CurrentCulture)
+                                   && x.Contains(Sql, StringComparison.CurrentCulture)
+                                   && x.Contains(fixture.ConnectionInfo.Server)
+                                   && x.Contains(fixture.ConnectionInfo.Database)
+                                ));
     }
 }

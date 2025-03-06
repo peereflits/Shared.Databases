@@ -35,11 +35,11 @@ This component is a shared infrastructure library of Peereflits.
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Condition=" '$(TargetFramework)' != 'net6.0' " Version="6.0.1" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Condition=" '$(TargetFramework)' == 'net6.0' " Version="5.2.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net9.0' " Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net8.0' " Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net6.0' " Version="6.0.4" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Condition=" '$(TargetFramework)' != 'net6.0' " Version="6.*" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Condition=" '$(TargetFramework)' == 'net6.0' " Version="5.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net9.0' " Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net8.0' " Version="8.*"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net6.0' " Version="6.*" />
   </ItemGroup>
 
   <ItemGroup>

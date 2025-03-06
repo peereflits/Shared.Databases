@@ -13,13 +13,13 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
     private const string Sql = "PRINT 'Hello World'";
 
     private readonly DatabaseFixture fixture;
-    private readonly ILogger<DatabaseCommand> logger;
+    private readonly MockedLogger<DatabaseCommand> logger;
     private readonly DatabaseCommand subject;
 
     public DatabaseCommandTest(DatabaseFixture fixture)
     {
         this.fixture = fixture;
-        logger = Substitute.For<ILogger<DatabaseCommand>>();
+        logger = Substitute.For<MockedLogger<DatabaseCommand>>();
         subject = new DatabaseCommand(fixture.ConnectionCreator, fixture.ConnectionInfo, logger);
     }
 
@@ -54,6 +54,28 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
     }
 
     [Fact]
+    public async Task WhenExecute_IsRetried_ItShouldLogWarning()
+    {
+        fixture
+               .ConnectionCreator
+               .Execute(fixture.ConnectionInfo)
+               .Returns
+                        (
+                         x => throw new RetriedDbException(),
+                         x => fixture.CreateConnection()
+                        );
+
+        await subject.Execute(Sql);
+
+        logger
+               .Received(1)
+               .Log(LogLevel.Warning,
+                    Arg.Is<string>(x=> x.Contains("Retry 1 of executing statement", StringComparison.CurrentCulture)
+                                    && x.Contains(Sql, StringComparison.CurrentCulture)
+                                  ));
+    }
+
+    [Fact]
     public async Task WhenExecuteFailsTooOften_ItShouldThrow()
     {
         fixture.ConnectionCreator.Execute(fixture.ConnectionInfo)
@@ -82,10 +104,10 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
         logger
                .Received()
                .Log(LogLevel.Error,
-                    Arg.Any<EventId>(),
-                    Arg.Any<AnyType>(),
-                    Arg.Any<NoRetryDbException>(),
-                    Arg.Any<Func<AnyType, Exception?, string>>()
-                   );
+                    Arg.Is<string>(x=> x.Contains("Failed to execute statement", StringComparison.CurrentCulture)
+                                    && x.Contains(Sql, StringComparison.CurrentCulture)
+                                    && x.Contains(fixture.ConnectionInfo.Server)
+                                    && x.Contains(fixture.ConnectionInfo.Database)
+                                  ));
     }
 }

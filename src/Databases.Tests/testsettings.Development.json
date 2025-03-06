@@ -1,6 +1,0 @@
-﻿{
-  "TestSettings": {
-    "DbServerName": ".\\SQL2019",
-    "IsTrusted": true
-  }
-}
