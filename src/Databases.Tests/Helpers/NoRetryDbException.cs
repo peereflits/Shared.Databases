@@ -4,5 +4,6 @@ namespace Peereflits.Shared.Databases.Tests.Helpers;
 
 internal class NoRetryDbException : DbException
 {
-    public NoRetryDbException() : base("Error", 1) { }
+    private const int NonTransientErrorCode = 1;
+    public NoRetryDbException() : base("Error", NonTransientErrorCode) { }
 }

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Peereflits.Shared.Databases.Tests.Helpers;
 using Xunit;
-using static NSubstitute.Arg;
 
 namespace Peereflits.Shared.Databases.Tests;
 
@@ -29,7 +28,9 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
     {
         await subject.Execute(Sql);
 
-        fixture.ConnectionCreator.Received().Execute(fixture.ConnectionInfo);
+        fixture.ConnectionCreator
+               .Received()
+               .Execute(fixture.ConnectionInfo);
     }
 
     [Fact]
@@ -50,10 +51,13 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
 
         await subject.Execute(Sql);
 
-        fixture.ConnectionCreator.Received().Execute(fixture.ConnectionInfo);
+        fixture.ConnectionCreator
+               .Received()
+               .Execute(fixture.ConnectionInfo);
     }
 
     [Fact]
+    [Trait(TestCategories.Key, TestCategories.Integration)]
     public async Task WhenExecute_IsRetried_ItShouldLogWarning()
     {
         fixture
@@ -83,8 +87,8 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
                         x => throw new RetriedDbException(),
                         x => throw new RetriedDbException(),
                         x => throw new RetriedDbException(),
-                        x => throw new RetriedDbException(),
-                        x => fixture.CreateConnection()
+                        x => throw new RetriedDbException(), // MaxRetryCount = 3
+                        x => fixture.CreateConnection() // This one should not be called!
                        );
 
         await Assert.ThrowsAsync<RetriedDbException>(() => subject.Execute(Sql));
@@ -96,7 +100,7 @@ public class DatabaseCommandTest : IClassFixture<DatabaseFixture>
         fixture.ConnectionCreator.Execute(fixture.ConnectionInfo)
                .Returns(
                         x => throw new NoRetryDbException(),
-                        x => fixture.CreateConnection()
+                        x => fixture.CreateConnection() // This one should not be called!
                        );
 
         await Assert.ThrowsAsync<NoRetryDbException>(() => subject.Execute(Sql));

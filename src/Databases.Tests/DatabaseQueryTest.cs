@@ -31,7 +31,9 @@ public class DatabaseQueryTest : IClassFixture<DatabaseFixture>
         IEnumerable<int> result = await subject.Execute<int>(Sql);
 
         Assert.Equal(1, result.Single());
-        fixture.ConnectionCreator.Received().Execute(fixture.ConnectionInfo);
+        fixture.ConnectionCreator
+               .Received()
+               .Execute(fixture.ConnectionInfo);
     }
 
     [Fact]
@@ -56,7 +58,9 @@ public class DatabaseQueryTest : IClassFixture<DatabaseFixture>
         IEnumerable<int> result = await subject.Execute<int>(Sql);
 
         Assert.Equal(1, result.Single());
-        fixture.ConnectionCreator.Received().Execute(fixture.ConnectionInfo);
+        fixture.ConnectionCreator
+               .Received()
+               .Execute(fixture.ConnectionInfo);
     }
 
     [Fact]
@@ -70,7 +74,7 @@ public class DatabaseQueryTest : IClassFixture<DatabaseFixture>
                          x => throw new RetriedDbException(),
                          x => throw new RetriedDbException(),
                          x => throw new RetriedDbException(),
-                         x => throw new RetriedDbException(),
+                         x => throw new RetriedDbException(), // MaxRetryCount = 3
                          x => fixture.CreateConnection() // This one should not be called!
                         );
 
@@ -78,6 +82,7 @@ public class DatabaseQueryTest : IClassFixture<DatabaseFixture>
     }
 
     [Fact]
+    [Trait(TestCategories.Key, TestCategories.Integration)]
     public async Task WhenExecute_IsRetried_ItShouldLogWarning()
     {
         fixture
@@ -108,7 +113,7 @@ public class DatabaseQueryTest : IClassFixture<DatabaseFixture>
                .Returns
                         (
                          x => throw new NoRetryDbException(),
-                         x => fixture.CreateConnection()
+                         x => fixture.CreateConnection() // This one should not be called!
                         );
 
         await Assert.ThrowsAsync<NoRetryDbException>(() => subject.Execute<int>(Sql));

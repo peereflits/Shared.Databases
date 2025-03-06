@@ -4,5 +4,6 @@ namespace Peereflits.Shared.Databases.Tests.Helpers;
 
 internal class RetriedDbException : DbException
 {
-    public RetriedDbException() : base("Error", 4060) { }
+    private const int TransientErrorCode = 4060;
+    public RetriedDbException() : base("Error", TransientErrorCode) { }
 }

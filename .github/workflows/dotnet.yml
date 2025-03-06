@@ -39,6 +39,7 @@ jobs:
         dotnet restore ${{ env.DOTNET_SOLUTION }}
         dotnet build ${{ env.DOTNET_SOLUTION }} --configuration Release --no-restore
 
+    # Category==Integration requires an active database in the build pipeline
     - name: Run unit tests
       run: dotnet test ${{ env.DOTNET_SOLUTION }} --configuration Release --no-restore --no-build --filter "Category!=Integration" --verbosity normal
 
