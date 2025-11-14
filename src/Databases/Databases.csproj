@@ -34,12 +34,11 @@ This component is a shared infrastructure library of Peereflits.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.66" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Condition=" '$(TargetFramework)' != 'net6.0' " Version="6.*" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Condition=" '$(TargetFramework)' == 'net6.0' " Version="5.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net9.0' " Version="9.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net8.0' " Version="8.*"/>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net6.0' " Version="6.*" />
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net9.0' " />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net8.0' " />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Condition=" '$(TargetFramework)' == 'net10.0' " />
   </ItemGroup>
 
   <ItemGroup>

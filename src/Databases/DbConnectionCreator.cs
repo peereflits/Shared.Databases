@@ -8,12 +8,11 @@ internal interface ICreateDbConnection
     IDbConnection Execute(ConnectionInfo info);
 }
 
-internal class DbConnectionCreator : ICreateDbConnection
+internal class DbConnectionCreator
+(
+    IProvideConnectionString provider
+) : ICreateDbConnection
 {
-    private readonly IProvideConnectionString provider;
-
-    public DbConnectionCreator(IProvideConnectionString provider) => this.provider = provider;
-
     public IDbConnection Execute(ConnectionInfo info)
     {
         ConnectionInfo.AssertIsValid(info);

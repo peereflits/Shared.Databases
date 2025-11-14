@@ -2,12 +2,11 @@
 
 namespace Peereflits.Shared.Databases;
 
-public class Factory: IFactory
+public class Factory
+(
+    ILoggerFactory loggerFactory
+) : IFactory
 {
-    private readonly ILoggerFactory loggerFactory;
-
-    public Factory(ILoggerFactory loggerFactory) => this.loggerFactory = loggerFactory;
-
     public IDatabaseQuery CreateQuery(ConnectionInfo info) 
         => new DatabaseQuery(CreateConnection(), info, loggerFactory.CreateLogger<DatabaseQuery>());
 

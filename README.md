@@ -146,9 +146,9 @@ VALUES
 ### Version support
 
 This library supports the following .NET versions:
-1. .NET 6.0
 1. .NET 8.0
 1. .NET 9.0
+1. .NET 10.0
 
 ---
 

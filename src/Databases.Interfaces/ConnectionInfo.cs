@@ -4,18 +4,12 @@ using System.Linq;
 
 namespace Peereflits.Shared.Databases;
 
-public class ConnectionInfo 
+public class ConnectionInfo
+(
+    string server,
+    string database
+)
 {
-    public ConnectionInfo
-    (
-        string server,
-        string database
-    )
-    {
-        Server = server;
-        Database = database;
-    }
-
     public ConnectionInfo
     (
         string server,
@@ -28,8 +22,8 @@ public class ConnectionInfo
         Password = password;
     }
 
-    public string Server { get; }
-    public string Database { get; }
+    public string Server { get; } = server;
+    public string Database { get; } = database;
     public string? User { get; }
     public string? Password { get; }
 

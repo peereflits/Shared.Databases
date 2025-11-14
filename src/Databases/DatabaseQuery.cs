@@ -8,22 +8,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Peereflits.Shared.Databases;
 
-internal class DatabaseQuery : Database, IDatabaseQuery
+internal class DatabaseQuery
+(
+    ICreateDbConnection connection,
+    ConnectionInfo info,
+    ILogger<DatabaseQuery> logger
+)
+        : Database(connection), IDatabaseQuery
 {
-    private readonly ConnectionInfo info;
-    private readonly ILogger<DatabaseQuery> logger;
-
-    public DatabaseQuery
-    (
-        ICreateDbConnection connection,
-        ConnectionInfo info,
-        ILogger<DatabaseQuery> logger
-    ) : base(connection)
-    {
-        this.info = info;
-        this.logger = logger;
-    }
-
     public async Task<IEnumerable<TResult>> Execute<TResult>(string statement, int? commandTimeout = null) 
         => await Execute<TResult>(statement, null, commandTimeout);
 

@@ -4,13 +4,14 @@ using System.Linq;
 namespace Peereflits.Shared.Databases;
 
 internal abstract class Database
+(
+    ICreateDbConnection connection
+)
 {
     protected const int MaxRetryCount = 3;
     protected const int TransientErrorTimeout = 5000;
 
-    protected Database(ICreateDbConnection connection) => Connection = connection;
-
-    protected ICreateDbConnection Connection { get; }
+    protected ICreateDbConnection Connection { get; } = connection;
 
     protected void EnrichException(DbException ex, ConnectionInfo info, string statement, object? arguments = null)
     {
