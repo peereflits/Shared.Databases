@@ -1,6 +1,6 @@
 ﻿{
   "TestSettings": {
-    "DbServerName": ".\\SQL2022",
+    "DbServerName": "localhost",
     "IsTrusted":  true
   }
 }
